@@ -25,6 +25,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //@ USE ROUTER
 require('./app/routers/sendMail')(app);
 
+app.get('/', (req, res) =>{
+   return res.status(200).json({message: " a read working"});
+})
+
+
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
