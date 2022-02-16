@@ -2,8 +2,18 @@ const nodemailer = require('nodemailer');
 
 //@ function for send mail
 exports.sendMail = (req, res) => {
-  const { name, email, subject } = req.body;
-  console.log({ name, email, subject });
+  const {
+    nom,
+    prenom,
+    tel,
+    email,
+    nombredenfants,
+    regime,
+    ville,
+    codepostal,
+    datenaissance,
+    datedeffets,
+  } = req.body;
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -18,15 +28,16 @@ exports.sendMail = (req, res) => {
   let mailOptions = {
     from: 'CHOISIR MUTUELLE',
     to: 'zbatty1297@gmail.com',
-    subject: 'test',
+    subject: 'CHOISIR MUTUELLE',
     email: email,
-    name: name,
-    html: `<p>email : ${email}</p> <br/> <p>name : ${name}</p> <br/> <p>subject : ${subject}</p>`,
-     attachments: [
-        {
-           filename: 'text1.pdf',
-            content: 'hello world!'
-        }]
+    name: nom,
+    html: `<p>email : ${email}</p> <br/> <p>name : ${prenom}</p> <br/>`,
+    attachments: [
+      {
+        filename: 'text1.pdf',
+        content: 'hello world!',
+      },
+    ],
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {

@@ -10,11 +10,12 @@ const path = require('path');
 const app = express();
 
 const corsOptions = {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false,
-    "optionsSuccessStatus": 204
-  };
+  origin: process.env.ORIGIN_URL,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  withCredentials: true,
+};
 
 //@ MIDDLEWERS
 app.use(express.json());
@@ -27,10 +28,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //@ USE ROUTER
 require('./app/routers/sendMail')(app);
 
-app.get('/', (req, res) =>{
-   return res.status(200).json({message: " a read working"});
-})
-
+app.get('/', (req, res) => {
+  return res.status(200).json({ message: ' a read working' });
+});
 
 const PORT = process.env.PORT || 4000;
 
