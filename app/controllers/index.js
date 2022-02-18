@@ -1,19 +1,8 @@
 const nodemailer = require('nodemailer');
+const path = require('path');
 
 //@ function for send mail
-exports.sendMail = (req, res) => {
-  const {
-    nom,
-    prenom,
-    tel,
-    email,
-    nombredenfants,
-    regime,
-    ville,
-    codepostal,
-    datenaissance,
-    datedeffets,
-  } = req.body;
+module.exports = ({ nom, prenom, email }) => {
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -31,23 +20,20 @@ exports.sendMail = (req, res) => {
     subject: 'CHOISIR MUTUELLE',
     email: email,
     name: nom,
-    html: `<p>email : ${email}</p> <br/> <p>name : ${prenom}</p> <br/>`,
+    prenom,
     attachments: [
       {
-        filename: 'text1.pdf',
-        content: 'hello world!',
+        filename: `${nom}${prenom}.pdf`,
+        path: path.join(__dirname, '../../mutuelle.pdf'), // <= Here
+        contentType: 'application/pdf',
       },
     ],
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error.message);
-      return res.status(500).json({
-        error:
-          "Répétez encore et encore, une erreur s'est produite dans le fonctionnement",
-      });
     } else {
-      res.status(200).json({ message: 'E-mail envoyé avec succès' });
+      console.log('E-mail envoyé avec succès');
     }
   });
 };
