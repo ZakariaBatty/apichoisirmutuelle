@@ -10,7 +10,7 @@ const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
 const pdfTemplate = require('./app/documents');
-const sendMail = require('./app/controllers');
+// const sendMail = require('./app/controllers');
 const nodemailer = require('nodemailer');
 const path = require('path');
 //@ setting cors
@@ -48,7 +48,7 @@ app.post('/create-pdf', (req, res) => {
       //   Hoodzpronos1@gmail.com
       let mailOptions = {
         from: 'CHOISIR MUTUELLE',
-        to: 'zbatty1297@gmail.com',
+        to: 'zbatty0912@gmail.com',
         subject: 'CHOISIR MUTUELLE',
         email: req.body.email,
         name: req.body.nom,
