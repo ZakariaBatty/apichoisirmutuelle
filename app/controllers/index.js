@@ -33,6 +33,7 @@ module.exports = ({ nom, prenom, email }) => {
     if (error) {
       console.log(error.message);
     } else {
+      res.status(200).json({ message: 'E-mail envoyé avec succès from email' });
       console.log('E-mail envoyé avec succès');
     }
   });
