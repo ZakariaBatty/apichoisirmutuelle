@@ -17,7 +17,7 @@ const path = require('path');
 //@ setting cors
 const corsOptions = {
   origin: process.env.ORIGIN_URL,
-  credentials: true,
+  // credentials: true,
   allowedHeaders: ['sessionId', 'Content-Type'],
   exposedHeaders: ['sessionId'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
