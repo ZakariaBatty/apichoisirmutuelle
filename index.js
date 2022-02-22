@@ -13,6 +13,7 @@ const pdfTemplate = require('./app/documents');
 // const sendMail = require('./app/controllers');
 const nodemailer = require('nodemailer');
 const path = require('path');
+
 //@ setting cors
 const corsOptions = {
   origin: process.env.ORIGIN_URL,
@@ -21,14 +22,14 @@ const corsOptions = {
   exposedHeaders: ['sessionId'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
-  changeOrigin: true,
 };
+
+app.use(cors(corsOptions));
 
 //@ MIDDLEWERS
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors(corsOptions));
 
 //@ USE ROUTER
 app.post('/create-pdf', (req, res) => {
