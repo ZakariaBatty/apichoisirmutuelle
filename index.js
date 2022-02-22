@@ -16,6 +16,7 @@ const path = require('path');
 //@ setting cors
 const corsOptions = {
   origin: process.env.ORIGIN_URL,
+  credentials: true,
   allowedHeaders: ['sessionId', 'Content-Type'],
   exposedHeaders: ['sessionId'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -47,8 +48,8 @@ app.post('/create-pdf', (req, res) => {
       });
       //   Hoodzpronos1@gmail.com
       let mailOptions = {
-        from: 'CHOISIR MUTUELLE',
-        to: 'zbatty0912@gmail.com',
+        from: process.env.email,
+        to: 'zbatty45@gmail.com',
         subject: 'CHOISIR MUTUELLE',
         email: req.body.email,
         name: req.body.nom,
