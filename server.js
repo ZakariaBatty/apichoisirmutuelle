@@ -10,7 +10,6 @@ const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
 const pdfTemplate = require('./app/documents');
-// const sendMail = require('./app/controllers');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
