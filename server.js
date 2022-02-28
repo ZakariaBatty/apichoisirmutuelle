@@ -30,11 +30,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.post('/create-pdf', (req, res) => {
-//   const { nom, prenom, email }= req.body;
-
-// });
-
 //@ USE ROUTER
 app.post('/create-pdf', cors(), (req, res) => {
   pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
