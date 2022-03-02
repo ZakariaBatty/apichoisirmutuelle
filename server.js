@@ -10,12 +10,15 @@ const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
 const pdfTemplate = require('./app/documents');
+// const sendMail = require('./app/controllers');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
 //@ setting cors
 const corsOptions = {
   origin: process.env.ORIGIN_URL,
+  allowedHeaders: ['sessionId', 'Content-Type'],
+  exposedHeaders: ['sessionId'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
 };
@@ -27,13 +30,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.post('/', (req, res) => {
+  res.status(200).json({ message: 'E-mail envoyé avec succès from email' });
+  console.log('E-mail envoyé avec succès');
+});
+
 //@ USE ROUTER
-app.post('/create-pdf', cors(), (req, res) => {
-  pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
+app.post('/create-pdf', async (req, res) => {
+  await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
     if (err) {
-      console.log(err);
+      console.log('not working');
+      return console.log(err);
     } else {
-      let transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
         secure: false,
@@ -44,7 +53,7 @@ app.post('/create-pdf', cors(), (req, res) => {
         },
       });
       //   Hoodzpronos1@gmail.com
-      let mailOptions = {
+      const mailOptions = {
         from: 'CHOISIR MUTUELLE',
         to: 'zbatty1297@gmail.com',
         subject: 'CHOISIR MUTUELLE',
@@ -61,11 +70,12 @@ app.post('/create-pdf', cors(), (req, res) => {
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error.message);
+          return res.status(500).json({ message: 'Not workin' });
         } else {
-          res
+          console.log('E-mail envoyé avec succès');
+          return res
             .status(200)
             .json({ message: 'E-mail envoyé avec succès from email' });
-          console.log('E-mail envoyé avec succès');
         }
       });
     }

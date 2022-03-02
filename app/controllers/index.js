@@ -2,8 +2,8 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 
 //@ function for send mail
-module.exports = ({ nom, prenom, email }) => {
-  let transporter = nodemailer.createTransport({
+module.exports = async ({ nom, prenom, email }) => {
+  const transporter = await nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
@@ -14,7 +14,7 @@ module.exports = ({ nom, prenom, email }) => {
     },
   });
   //   Hoodzpronos1@gmail.com
-  let mailOptions = {
+  const mailOptions = {
     from: 'CHOISIR MUTUELLE',
     to: 'zbatty1297@gmail.com',
     subject: 'CHOISIR MUTUELLE',
@@ -29,12 +29,14 @@ module.exports = ({ nom, prenom, email }) => {
       },
     ],
   };
-  transporter.sendMail(mailOptions, function (error, info) {
+  await transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error.message);
+      return res.status(500).json({ message: 'Not workin' });
     } else {
-      res.status(200).json({ message: 'E-mail envoyé avec succès from email' });
-      console.log('E-mail envoyé avec succès');
+      return res
+        .status(200)
+        .json({ message: 'E-mail envoyé avec succès from email' });
     }
   });
 };
