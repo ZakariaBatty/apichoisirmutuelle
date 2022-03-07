@@ -50,7 +50,6 @@ const createPdf = (req, res) => {
           pass: process.env.password_mail,
         },
       });
-      //   Hoodzpronos1@gmail.com
       const mailOptions = {
         from: 'CHOISIR MUTUELLE',
         to: 'zbatty1297@gmail.com',
