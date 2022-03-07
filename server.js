@@ -73,12 +73,11 @@ const sendMail = (req, res) => {
 };
 
 const createPdf = async (req, res) => {
-  pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
-    try {
-      if (!err) sendMail(req, res);
-    } catch (error) {
-      return console.log(err);
-    }
+  await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
+    return new Promise(resolve => {
+      if (!err) resolve('fail');
+      sendMail(req, res);
+    }).catch(err => console.log(err));
   });
 };
 
