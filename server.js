@@ -12,7 +12,6 @@ const pdf = require('html-pdf');
 const pdfTemplate = require('./app/documents');
 const path = require('path');
 const nodemailer = require('nodemailer');
-// const Queue = require('bee-queue');
 // choisirmutuelle.fr@gmail.com
 //@ setting cors
 const corsOptions = {
@@ -36,68 +35,67 @@ app.post('/', (req, res) => {
 });
 
 const createPdf = (req, res) => {
-  return pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
-    if (err) {
-      console.log('not working');
-      return console.log(err);
-    } else {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        service: 'gmail',
-        auth: {
-          user: process.env.email,
-          pass: process.env.password_mail,
-        },
-      });
-      //   Hoodzpronos1@gmail.com
-      const mailOptions = {
-        from: 'CHOISIR MUTUELLE',
-        to: 'zbatty1297@gmail.com',
-        subject: 'CHOISIR MUTUELLE',
-        email: req.body.email,
-        name: req.body.nom,
-        attachments: [
-          {
-            filename: `${req.body.nom}${req.body.prenom}.pdf`,
-            path: path.join(__dirname, './mutuelle.pdf'), // <= Here
-            contentType: 'application/pdf',
+  pdf
+    .create(pdfTemplate(req.body), {})
+    .toFile('mutuelle.pdf', err => {
+      if (err) {
+        console.log('not working');
+        return console.log(err);
+      } else {
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          service: 'gmail',
+          auth: {
+            user: process.env.email,
+            pass: process.env.password_mail,
           },
-        ],
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error.message);
-          return res.status(500).json({ message: 'Not workin' });
-        } else {
-          console.log('E-mail envoyé avec succès');
-          return res
-            .status(200)
-            .json({ message: 'E-mail envoyé avec succès from email' });
-        }
+        });
+        //   Hoodzpronos1@gmail.com
+        const mailOptions = {
+          from: 'CHOISIR MUTUELLE',
+          to: 'zbatty1297@gmail.com',
+          subject: 'CHOISIR MUTUELLE',
+          email: req.body.email,
+          name: req.body.nom,
+          attachments: [
+            {
+              filename: `${req.body.nom}${req.body.prenom}.pdf`,
+              path: path.join(__dirname, './mutuelle.pdf'), // <= Here
+              contentType: 'application/pdf',
+            },
+          ],
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error.message);
+            return res.status(500).json({ message: 'Not workin' });
+          } else {
+            console.log('E-mail envoyé avec succès');
+            return res
+              .status(200)
+              .json({ message: 'E-mail envoyé avec succès from email' });
+          }
+        });
+      }
+    })
+    .then(res => {
+      return new Promise(resolve => {
+        if (!res) resolve('fail');
+        console.log('work good');
       });
-    }
-  });
+    })
+    .catch(err => {
+      console.log(err);
+      console.log('work bad');
+    });
 };
-
-// const addQueue = new Queue('example');
 
 //@ USE ROUTER
 app.post('/create-pdf', async (req, res) => {
   await createPdf(req, res);
 });
-// const job = addQueue.createJob({ x: 2, y: 3 });
-// job
-//   .timeout(3000)
-//   .retries(2)
-//   .save()
-//   .then(job => {
-//     // return
-//   })
-//   .catch(err => {
-//     console.log(err);
-//   });
 
 const PORT = process.env.PORT || 4000;
 
