@@ -29,8 +29,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.post('/', (req, res) => {
-  res.status(200).json({ message: 'E-mail envoyé avec succès from email' });
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'api working good' });
   console.log('E-mail envoyé avec succès');
 });
 
