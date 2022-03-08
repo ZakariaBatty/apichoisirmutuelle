@@ -77,13 +77,9 @@ const sendMail = (req, res) => {
 const createPdf = async (req, res) => {
   await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
     return new Promise(resolve => {
-      if (err) {
-        resolve('fail');
-      } else {
-        return sendMail(req, res);
-      }
+      if (err) resolve('fail');
+      if (!err) sendMail(req, res);
     }).catch(err => {
-      console.log(err);
       return res
         .status(500)
         .json({ error: 'Tentative infructueuse, réessayez' });
