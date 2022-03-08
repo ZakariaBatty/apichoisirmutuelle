@@ -62,7 +62,9 @@ const sendMail = (req, res) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error.message);
-      return res.status(500).json({ message: 'Not workin' });
+      return res
+        .status(500)
+        .json({ error: 'Tentative infructueuse, réessayez' });
     } else {
       console.log('E-mail envoyé avec succès');
       return res
@@ -75,9 +77,17 @@ const sendMail = (req, res) => {
 const createPdf = async (req, res) => {
   await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
     return new Promise(resolve => {
-      if (!err) resolve('fail');
-      sendMail(req, res);
-    }).catch(err => console.log(err));
+      if (err) {
+        resolve('fail');
+      } else {
+        return sendMail(req, res);
+      }
+    }).catch(err => {
+      console.log(err);
+      return res
+        .status(500)
+        .json({ error: 'Tentative infructueuse, réessayez' });
+    });
   });
 };
 
