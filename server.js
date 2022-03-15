@@ -9,9 +9,12 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
-const pdfTemplate = require('./app/documents');
+const fs = require('fs');
+// const pdfTemplate = require('./app/documents/index.js');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const html = fs.readFileSync('./app/documents/index.js', 'utf8');
+
 // choisirmutuelle.fr@gmail.com
 //@ setting cors
 const corsOptions = {
@@ -33,6 +36,8 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'api working good' });
   console.log('E-mail envoyé avec succès');
 });
+
+const options = { format: 'Letter' };
 
 const sendMail = (req, res) => {
   const transporter = nodemailer.createTransport({
@@ -75,7 +80,7 @@ const sendMail = (req, res) => {
 };
 
 const createPdf = async (req, res) => {
-  await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
+  await pdf.create(html, options).toFile('mutuelle.pdf', err => {
     return new Promise(resolve => {
       if (err) resolve('fail');
       if (!err) sendMail(req, res);
