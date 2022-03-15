@@ -89,7 +89,7 @@ const createPdf = async (req, res) => {
         console.log(err);
         return res
           .status(500)
-          .json({ error: 'Tentative infructueuse, réessayez' });
+          .json({ error: 'Tentative infructueuse, réessayez pdf' });
       });
     });
 };

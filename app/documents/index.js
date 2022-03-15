@@ -97,9 +97,9 @@ module.exports = ({
                    <td colspan="2">
                       <table>
                          <tr>
-                            <td class="title"><img  src="https://choisirmutuelle.ga/static/media/logo.6b687038.png"
-                               style="width:100%; max-width:156px;"></td>
-                            <td>
+                           //  <td class="title"><img  src="https://choisirmutuelle.ga/static/media/logo.6b687038.png"
+                           //     style="width:100%; max-width:156px;"></td>
+                           //  <td>
                             Date: ${`${today.getDate()}. ${
                               today.getMonth() + 1
                             }. ${today.getFullYear()}.`}
