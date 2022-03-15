@@ -32,5 +32,5 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:
           server: ftp.choisirmutuelle.ga
-          username: ${{ secrets.FTP_USERNAME_API }}s
+          username: ${{ secrets.FTP_USERNAME_API }}
           password: ${{ secrets.FTP_PASSWORD_API }}

@@ -16,7 +16,7 @@ module.exports = ({
     <html>
        <head>
           <meta charset="utf-8">
-          <title>PDF Result Template</title>
+          <title>Choisir mutuelle</title>
           <style>
              .invoice-box {
              max-width: 800px;
