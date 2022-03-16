@@ -35,8 +35,6 @@ app.get('/', (req, res) => {
   console.log('E-mail envoyé avec succès');
 });
 
-const options = { format: 'Letter' };
-
 const sendMail = (req, res) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -79,7 +77,10 @@ const sendMail = (req, res) => {
 
 const createPdf = async (req, res) => {
   await pdf
-    .create(pdfTemplate(req.body), options)
+    .create(pdfTemplate(req.body), {
+      type: 'pdf',
+      timeout: '300000',
+    })
     .toFile('mutuelle.pdf', err => {
       return new Promise(resolve => {
         if (err) resolve('fail');
