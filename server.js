@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
-const pdfTemplate = require('./app/documents/index.js');
+const pdfTemplate = require('./app/documents/');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
@@ -62,12 +62,10 @@ const sendMail = (req, res) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error.message);
       return res
         .status(500)
         .json({ error: 'Tentative infructueuse, réessayez' });
     } else {
-      console.log('E-mail envoyé avec succès');
       return res
         .status(200)
         .json({ message: 'E-mail envoyé avec succès from email' });
@@ -86,10 +84,9 @@ const createPdf = async (req, res) => {
         if (err) resolve('fail');
         if (!err) sendMail(req, res);
       }).catch(err => {
-        console.log(err);
         return res
           .status(500)
-          .json({ error: 'Tentative infructueuse, réessayez pdf' });
+          .json({ error: 'Tentative infructueuse, réessayez pdf', err });
       });
     });
 };
