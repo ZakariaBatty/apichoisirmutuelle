@@ -77,7 +77,7 @@ const createPdf = async (req, res) => {
   await pdf
     .create(pdfTemplate(req.body), {
       type: 'pdf',
-      timeout: '300000',
+      timeout: '200000',
     })
     .toFile('mutuelle.pdf', err => {
       return new Promise(resolve => {
