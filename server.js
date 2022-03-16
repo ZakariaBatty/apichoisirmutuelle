@@ -9,11 +9,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 const pdf = require('html-pdf');
-const fs = require('fs');
-// const pdfTemplate = require('./app/documents/index.js');
+const pdfTemplate = require('./app/documents/index.js');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const html = fs.readFileSync('./app/documents/index.js', 'utf8');
 
 // choisirmutuelle.fr@gmail.com
 //@ setting cors
@@ -80,17 +78,19 @@ const sendMail = (req, res) => {
 };
 
 const createPdf = async (req, res) => {
-  await pdf.create(html, options).toFile('mutuelle.pdf', err => {
-    return new Promise(resolve => {
-      if (err) resolve('fail');
-      if (!err) sendMail(req, res);
-    }).catch(err => {
-      console.log(err);
-      return res
-        .status(500)
-        .json({ error: 'Tentative infructueuse, réessayez pdf' });
+  await pdf
+    .create(pdfTemplate(req.body), options)
+    .toFile('mutuelle.pdf', err => {
+      return new Promise(resolve => {
+        if (err) resolve('fail');
+        if (!err) sendMail(req, res);
+      }).catch(err => {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ error: 'Tentative infructueuse, réessayez pdf' });
+      });
     });
-  });
 };
 
 //@ USE ROUTER
