@@ -74,26 +74,22 @@ const sendMail = (req, res) => {
 };
 
 const createPdf = async (req, res) => {
-  await pdf
-    .create(pdfTemplate(req.body), {
-      type: 'pdf',
-      timeout: '200000',
-    })
-    .toFile('mutuelle.pdf', err => {
-      return new Promise(resolve => {
-        if (err) resolve('fail');
-        if (!err) sendMail(req, res);
-      }).catch(err => {
-        return res
-          .status(500)
-          .json({ error: 'Tentative infructueuse, réessayez pdf', err });
-      });
+  try {
+    await pdf.create(pdfTemplate(req.body), {}).toFile('mutuelle.pdf', err => {
+      if (!err) sendMail(req, res);
+      console.log(err);
     });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ error: 'Tentative infructueuse, réessayez pdf' });
+  }
 };
 
 //@ USE ROUTER
-app.post('/create-pdf', async (req, res) => {
-  await createPdf(req, res);
+app.post('/create-pdf', async (req, res, callback) => {
+  await createPdf(req, res, callback);
 });
 
 const PORT = process.env.PORT || 4000;
