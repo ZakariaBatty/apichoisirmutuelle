@@ -7,6 +7,8 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const app = express();
 const pdf = require('html-pdf');
 const pdfTemplate = require('./app/documents/');
@@ -32,7 +34,7 @@ app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'api working good' });
-  console.log('E-mail envoyé avec succès');
+  console.log('api working good');
 });
 
 const sendMail = (req, res) => {
@@ -42,8 +44,8 @@ const sendMail = (req, res) => {
     secure: false,
     service: 'gmail',
     auth: {
-      user: process.env.email,
-      pass: process.env.password_mail,
+      user: 'choisirmutuel@gmail.com',
+      pass: 'choisirmutuel123',
     },
   });
   const mailOptions = {
@@ -62,9 +64,10 @@ const sendMail = (req, res) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
+      console.log(error.message);
       return res
         .status(500)
-        .json({ error: 'Tentative infructueuse, réessayez' });
+        .json({ error: 'Tentative infructueuse, réessayez email' });
     } else {
       return res
         .status(200)
@@ -89,8 +92,9 @@ const createPdf = async (req, res) => {
 };
 
 //@ USE ROUTER
-app.post('/create-pdf', async (req, res, callback) => {
-  await createPdf(req, res, callback);
+app.post('/create-pdf', jsonParser, async (req, res, callback) => {
+  // await createPdf(req, res, callback);
+  await sendMail(req, res, callback);
 });
 
 const PORT = process.env.PORT || 4000;
