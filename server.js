@@ -28,7 +28,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //@ MIDDLEWERS
-// app.use(bodyParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -40,10 +39,13 @@ app.get('/', (req, res) => {
 
 const sendMail = (req, res) => {
   const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     service: 'gmail',
     auth: {
-      user: 'choisirmutuel@gmail.com',
-      pass: 'choisirmutuel123',
+      user: process.env.email,
+      pass: process.env.password_mail,
     },
   });
   const mailOptions = {
@@ -91,7 +93,6 @@ const createPdf = async (req, res) => {
 
 //@ USE ROUTER
 app.post('/create-pdf', jsonParser, async (req, res, callback) => {
-  // await createPdf(req, res, callback);
   await sendMail(req, res, callback);
 });
 
